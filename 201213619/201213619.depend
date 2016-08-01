@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1470064020 source:/home/javierb/github/Proyecto1_201213619/201213619/admin_discos.c
+
+1470064092 source:/home/javierb/github/Proyecto1_201213619/201213619/ext2.c
+
+1469768610 source:/home/javierb/github/Proyecto1_201213619/201213619/main.c
+	<stdio.h>
+	<stdlib.h>
+
