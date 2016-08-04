@@ -1,17 +1,20 @@
 #ifndef ANALIZADOR_H_INCLUDED
 #define ANALIZADOR_H_INCLUDED
 
+typedef struct NodoLista{
+    char parametro[200];
+    char nombre[200];
+    struct NodoLista* siguiente;
+}NodoLista;
 
-//tipos te token: comando=1, parametro=2, igual=3, cadena=4, direccion=5
-struct token{
-    char cadena[250];
-    int tipo;
-}token;
+typedef struct Lista{
+    NodoLista *primero;
+}Lista;
 
-void analizar_cadena(char* cadena);
-
-
-
+void ejecutar_lista(Lista *lista);
+void insertar_parametro(Lista *lista, char *nombre, char*parametro);
+void EJECUTAR_COMANDO(char *comando);
+void EXEC(char *archivo);
 
 
 

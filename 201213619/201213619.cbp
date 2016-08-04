@@ -31,6 +31,18 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="admin_discos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="admin_discos.h" />
+		<Unit filename="analizador.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="analizador.h" />
+		<Unit filename="ext2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ext2.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
