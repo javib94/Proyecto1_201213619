@@ -7,7 +7,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <math.h>
-#include <lwh.h>
+#include "ext2.h"
 #define NOPARTICIONES 4
 
 typedef struct EXTENDED_BOOT_RECORD{

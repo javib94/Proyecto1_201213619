@@ -1,9 +1,34 @@
 # depslib dependency file v1.0
-1470064020 source:/home/javierb/github/Proyecto1_201213619/201213619/admin_discos.c
+1470779469 source:/home/javierb/github/Proyecto1_201213619/201213619/admin_discos.c
+	"admin_discos.h"
 
-1470064092 source:/home/javierb/github/Proyecto1_201213619/201213619/ext2.c
+1470779435 source:/home/javierb/github/Proyecto1_201213619/201213619/ext2.c
+	"ext2.h"
 
 1469768610 source:/home/javierb/github/Proyecto1_201213619/201213619/main.c
 	<stdio.h>
 	<stdlib.h>
+
+1470779461 /home/javierb/github/Proyecto1_201213619/201213619/admin_discos.h
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<assert.h>
+	<time.h>
+	<ctype.h>
+	<math.h>
+	"ext2.h"
+
+1470779435 /home/javierb/github/Proyecto1_201213619/201213619/ext2.h
+	<time.h>
+	<stdio.h>
+	<string.h>
+
+1470779697 source:/home/javierb/github/Proyecto1_201213619/201213619/analizador.c
+	"analizador.h"
+	<string.h>
+
+1470779691 /home/javierb/github/Proyecto1_201213619/201213619/analizador.h
+	<stdio.h>
+	"admin_discos.h"
 

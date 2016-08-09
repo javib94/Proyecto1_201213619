@@ -1,5 +1,7 @@
 #ifndef ANALIZADOR_H_INCLUDED
 #define ANALIZADOR_H_INCLUDED
+#include <stdio.h>
+#include "admin_discos.h"
 
 typedef struct NodoLista{
     char parametro[200];
