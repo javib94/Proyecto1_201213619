@@ -4,7 +4,7 @@
 
 void ejecutar_lista(Lista *lista){
     NodoLista* aux = lista->primero;
-        if(!strcasecmp(aux->nombre,"mkdisk")){
+    if(!strcasecmp(aux->nombre,"mkdisk")){
         int size=0;
         char unit= 'k';
         char path[100];
@@ -61,7 +61,7 @@ void ejecutar_lista(Lista *lista){
                 size=strtol(aux->parametro,NULL,10);
             }
             else if(!strcasecmp(aux->nombre,"unit")){
-                if(!strcasecmp(aux->parametro,"k")||!strcasecmp(aux->parametro,"m")||!!strcasecmp(aux->parametro,"b")){
+                if(!strcasecmp(aux->parametro,"k")||!strcasecmp(aux->parametro,"m")||!strcasecmp(aux->parametro,"b")){
                     unit=aux->parametro[0];
                 }else{
                     printf("Unidad no validas\n");
@@ -208,10 +208,12 @@ void ejecutar_lista(Lista *lista){
             MKDIR(id, path, p);
         }
 }
-void EJECUTAR_COMANDO(char *comando){
+int EJECUTAR_COMANDO(char *comando){
     int i = 0;
     int j = 0;
+    //int terminado=1;
     strcat(comando," ");
+    strcat(comando,"\n");
     Lista *comandos = (Lista*)malloc(sizeof(Lista));
     comandos->primero = NULL;
     char nombre[100];
@@ -221,22 +223,24 @@ void EJECUTAR_COMANDO(char *comando){
     int estado=0;
     int error=0;
     //basado en automata->
-    while(comando[i]!='\0'&&!error){
+    while(comando[i]!='\0'&&error==0){
        if(estado==0){
-           if(comando[i]>=65&&comando[i]<=90||comando[i]>=97&&comando[i]<=122){
+           if((comando[i]>=65&&comando[i]<=90)||(comando[i]>=97&&comando[i]<=122)){
                nombre[j]=comando[i];
                estado = 1;
                j++;
            }else if(comando[i]=='#'){
-               printf("Comentario\n");
-               error=1;
+               //printf("Comentario\n");
+               estado = 9;
            }
-           else{
+           else if(comando[i]==' '||comando[i]=='\t'||comando[i]=='\n'){
                //printf("Error en el comando 0\n");
-               error=1;
+               //error=1;
+           }else{
+            error=10;
            }
        } else if(estado==1){
-           if(comando[i]>=65&&comando[i]<=90||comando[i]>=97&&comando[i]<=122){
+           if((comando[i]>=65&&comando[i]<=90)||(comando[i]>=97&&comando[i]<=122)){
                nombre[j]=comando[i];
                estado = 1;
                j++;
@@ -252,35 +256,38 @@ void EJECUTAR_COMANDO(char *comando){
            }
        }
        else if(estado==2){
-           if(comando[i]=='-'||comando[i]=='–'){
+            char x = comando[i];
+           if(comando[i]=='-'||comando[i]=='–'||comando[i]=='+'){
                estado=3;
            }else if(comando[i]==' '||comando[i]=='\t'||comando[i]=='\n'){
                estado=2;
            }
+           else if(comando[i]=='#'){
+            estado = 9;
+           }
            else{
                //printf("Error en el comando, error 2\n");
-               error=1;
+                 error=2;
            }
        }
        else if(estado==3){
-           if(comando[i]>=65&&comando[i]<=90||comando[i]>=97&&comando[i]<=122){
+           if((comando[i]>=65&&comando[i]<=90)||(comando[i]>=97&&comando[i]<=122)){
                nombre[j]=comando[i];
                estado = 4;
                j++;
            }else{
              //  printf("Error en el comando, error 3\n");
-               error=1;
+               error=3;
            }
        }
        else if(estado==4){
-           if(comando[i]>=65&&comando[i]<=90||comando[i]>=97&&comando[i]<=122){
+           if((comando[i]>=65&&comando[i]<=90)||(comando[i]>=97&&comando[i]<=122)){
                nombre[j]=comando[i];
                estado = 4;
                j++;
            }else if(comando[i]==':'){
-               estado = 5;
-               j=0;
-           }else if(comando[i]==' '){
+               estado = 8;
+           }else if(comando[i]==' '||comando[i]=='\t'){
                insertar_parametro(comandos,nombre,parametro);
                limpiar_cadena(nombre,100);
                limpiar_cadena(parametro,100);
@@ -289,12 +296,14 @@ void EJECUTAR_COMANDO(char *comando){
            }
            else{
                //printf("Error en el comando, error 4\n");
-               error=1;
+               error=4;
            }
        }
        else if(estado==5){
            if(comando[i]=='"'){
                estado=6;
+           }else if(comando[i]==' '||comando[i]=='\t'){
+                estado = 5;
            }
            else{
                parametro[j]=comando[i];
@@ -334,14 +343,33 @@ void EJECUTAR_COMANDO(char *comando){
                 }
            }
        }
+       else if(estado==8){
+        if(comando[i]==':'){
+            estado = 5;
+            j=0;
+        }else{
+            error = 8;
+        }
+       }
+       else if(estado==9){
+        if(comando[i]!='\n'){
+            //comentario
+        }
+       }
        i++;
     }
     //imprimir_lista(comandos);
     if(comandos->primero!=NULL){
-        ejecutar_lista(comandos);
+        if(error == 0){
+            ejecutar_lista(comandos);
+        }else{
+            printf("Error estado %d\n", error);
+        }
     }else{
-        //printf("sin comando \n");
+        printf("sin comando \n");
+//home/javierb/github/Proyecto1_201213619/201213619
     }
+    return 0;
 }
 
 void insertar_parametro(Lista *lista, char *nombre, char*parametro){
@@ -377,7 +405,7 @@ void imprimir_lista(Lista *lista){
     FILE* script = fopen(archivo,"r");
     char linea;
     rewind(script);
-    /*while(!feof(script)){
+    while(!feof(script)){
         fscanf(script,linea);
 
         limpiar_cadena(linea, 250);

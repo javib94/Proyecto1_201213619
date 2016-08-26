@@ -15,7 +15,7 @@ typedef struct Lista{
 
 void ejecutar_lista(Lista *lista);
 void insertar_parametro(Lista *lista, char *nombre, char*parametro);
-void EJECUTAR_COMANDO(char *comando);
+int EJECUTAR_COMANDO(char *comando);
 void EXEC(char *archivo);
 
 

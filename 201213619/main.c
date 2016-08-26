@@ -3,20 +3,6 @@
 
 int main(int argc, char *argv[])
 {
-    //printf("tamaño de timet= %d", sizeof(time_t));
-//    printf("Tamaño de Log: %d \n", sizeof(Log));
-
-//    printf("Tamaño de AVD: %d \n", sizeof(avd));
-
-  //  printf("Tamaño de Detalle Dir: %d \n", sizeof(D_Directorio));
-
-    //printf("Tamaño de Inodo: %d \n", sizeof(Inodo));
-
-    //printf("Tamaño de Data_block: %d \n", sizeof(Data_Block));
-
-//    printf("Tamaño de SuperBloque: %d \n", sizeof(Superbloque));
-
-
 
     char *buffer = NULL;
     int read;

@@ -11,9 +11,6 @@ char* timeToChar(){
         return t;
 }
 
-
-
-
 char *carpeta(char *path){
     int tam = strlen(path);
     char *nueva;
@@ -26,6 +23,7 @@ char *carpeta(char *path){
     }
     return nueva;
 }
+
 void MKDISK(int  size,int unit, char* path){//SIZE EN BYTES
     MBR mbr;
     if(size>0){
@@ -61,7 +59,8 @@ void MKDISK(int  size,int unit, char* path){//SIZE EN BYTES
         fwrite(&mbr, sizeof(MBR), 1, archivo);
         size = size-sizeof(MBR);
         while(size>0){
-            fputc('\0',archivo);
+            char c = '\0';
+            fwrite(&c, 1,1,archivo);
             size--;
         }
         fclose(archivo);
@@ -89,16 +88,16 @@ void Montar_Particion(MountedDisk *disc, int start_bit, char tipo, char *nombre)
     if(disc->first==NULL){
         disc->first = (MountedPartition*)malloc(sizeof(MountedPartition));
         disc->first->bit_start = start_bit;
+        strcpy(disc->first->nombre_part, nombre);
         limpiar_cadena(disc->first->name,4);
         disc->first->name[0]='v';
         disc->first->name[1]='d';
         disc->first->name[2]=disc->letter;
         disc->first->name[3]=disc->count;
-        disc->first->name[4]='\0';
         disc->first->type= tipo;
-        strcpy(disc->first->nombre_part, nombre);
         disc->first->siguiente = NULL;
         disc->count++;
+        disc->first->name[4]='\0';
         printf("Montado como disco %s\n",disc->first->name);
     }else{
         MountedPartition* nuevo = (MountedPartition*)malloc(sizeof(MountedPartition));
@@ -159,6 +158,7 @@ void MOUNT(char *path, char *name){
             montados.first->count='1';
             montados.first->letter = montados.current_letter;
             montados.first->first = NULL;
+            montados.first->siguiente = NULL;//Agregar esto MODIFICACION AQUIIIIIIIIIII
             Montar_Particion(montados.first,part.part_start,part.part_type, name);
             montados.current_letter++;
         }else{
@@ -170,8 +170,8 @@ void MOUNT(char *path, char *name){
                 nuevo->letter = montados.current_letter;
                 nuevo->first = NULL;
                 montados.current_letter++;
-                nuevo->siguiente = NULL;
-                montados.first = nuevo;
+                nuevo->siguiente = montados.first;//MODIFICACION AQUIIIIIIII
+                montados.first = nuevo;//MODIFICACION AQUIIIIIIII
                 Montar_Particion(nuevo,part.part_start,part.part_type, name);
             }else{
                 Montar_Particion(actual,part.part_start, part.part_type,name);
@@ -185,7 +185,6 @@ void MOUNT(char *path, char *name){
         actualizar_sb(disco, part.part_start, &sb);
         fclose(disco);
     }else{
-
         printf("particion no encontrada \n");
    }
 }
@@ -323,7 +322,7 @@ void FDISK(int size,char unit, char *path, char type, char fit, char del, int ad
                 Reescribir_mbr(mbr,disco);
             }
         }else{
-            if(type=='p'||type=='P'){
+            if(type=='p'||type=='P'&&size>0){
                 int posicion = partition_disponible(&mbr);
                 if(posicion!=-1){
                     //buscar espacio disponible
@@ -668,7 +667,7 @@ void rep_sb(char *id, char *path){
     }
 }
 
-void rep_mbr(char *path, char *id){
+void rep_mbr( char *id,char *path){
     char letra = id[2];
     char num = id[3];
     MountedDisk *disc = montados.first;
